@@ -10,7 +10,6 @@ class Database {
     @Bean
     fun initDatabase(usersRepository: UsersRepository): CommandLineRunner {
         return CommandLineRunner{
-
         }
     }
 

@@ -53,7 +53,6 @@ class Controller (private val userRepository : UsersRepository) {
         }else
             null
     }
-
     @GetMapping("journey")
     fun journey(@RequestBody request:User):Any?{
         return if(validateUserViaToken(request.email,request.token,userRepository)){
