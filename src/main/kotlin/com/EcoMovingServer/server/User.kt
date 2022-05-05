@@ -1,16 +1,17 @@
 package com.EcoMovingServer.server
 
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
-data class User(@Id val user:String, val password:String) {
+data class User(val password:String,@Id val email:String) {
 
-    private var token:String? = null
-    private val codeKey = user+password
+    var token:String? = null
+    val codeKey = email
 
-    override fun toString():String{
+    override fun toString(): String {
         val gson = Gson()
         return gson.toJson(this)
     }
