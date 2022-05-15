@@ -1,4 +1,4 @@
-package com.EcoMovingServer.server
+package com.serverecomoving
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

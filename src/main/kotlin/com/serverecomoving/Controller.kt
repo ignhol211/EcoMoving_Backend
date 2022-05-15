@@ -1,11 +1,10 @@
-package com.EcoMovingServer.server
+package com.serverecomoving
 
 import org.springframework.web.bind.annotation.*
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
-
 
 @RestController
 class Controller (private val userRepository : UsersRepository) {
@@ -16,49 +15,32 @@ class Controller (private val userRepository : UsersRepository) {
     }
 
     @PostMapping("register")
-    fun userSignUp(@RequestBody request:User):Any{
+    fun register(@RequestBody request: User): Boolean {
+
+        println(request.toString())
         userRepository.save(request)
-        return userRepository.findAll()
-    }
-/*
-    @RequestMapping("signUp", method = [RequestMethod.POST])
-    fun userSignUp2(@RequestBody user:User):Any{
-        userRepository.save(user)
-        return userRepository.findAll().first()
+        return true
     }
 
+    @PostMapping("login")
+    fun login(@RequestBody request: User): AuthUser?{
 
-    @PostMapping("signUp", consumes = [MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_FORM_URLENCODED_VALUE,MediaType.APPLICATION_OCTET_STREAM_VALUE])
-    fun userSignUp3(@RequestBody user:User):Any{
-        userRepository.save(user)
-        return userRepository.findAll().first()
-    }
+        println(request.toString())
 
-    @PostMapping("signUp", consumes=["application/octet-stream","application/x-www-form-urlencoded","application/json"])
-    fun userSignUp4(@RequestBody user:User):Any{
-        userRepository.save(user)
-        return userRepository.findAll().first()
-    }
-*/
-    @GetMapping("login")
-    fun userSignIn(@RequestBody request:User):User?{
         return if(validateUserViaPassword(request.email,request.password, userRepository)){
-
             val token = getRandomToken()
             val user = userRepository.getById(request.email)
             user.token = token
             userRepository.save(user)
             user.token = encode(token,user.codeKey)
-            user
+            val authUser = AuthUser(user)
+            authUser
         }else
             null
     }
     @GetMapping("journey")
-    fun journey(@RequestBody request:User):Any?{
-        return if(validateUserViaToken(request.email,request.token,userRepository)){
-            true
-        }else
-            null
+    fun journey(@RequestBody request: User):Boolean{
+        return validateUserViaToken(request.email,request.token,userRepository)
     }
 
 }

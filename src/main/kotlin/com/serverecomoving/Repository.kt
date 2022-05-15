@@ -1,4 +1,4 @@
-package com.EcoMovingServer.server
+package com.serverecomoving
 
 import org.springframework.data.jpa.repository.JpaRepository
 
