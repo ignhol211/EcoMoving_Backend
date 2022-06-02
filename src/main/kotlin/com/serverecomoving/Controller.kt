@@ -17,17 +17,12 @@ class Controller (private val userRepository : UsersRepository) {
     @PostMapping("register")
     @ResponseBody
     fun register(@RequestParam request:User): Boolean {
-
-        println(request.toString())
         userRepository.save(request)
         return true
     }
 
     @PostMapping("login")
     fun login(@RequestBody request: User): AuthUser?{
-
-        println(request.toString())
-
         return if(validateUserViaPassword(request.email,request.password, userRepository)){
             val token = getRandomToken()
             val user = userRepository.getById(request.email)
@@ -39,11 +34,14 @@ class Controller (private val userRepository : UsersRepository) {
         }else
             null
     }
-    @GetMapping("journey")
-    fun journey(@RequestBody request: User):Boolean{
-        return validateUserViaToken(request.email,request.token,userRepository)
+    @PostMapping("getAvailabledVehicles")
+    fun getAvailabledVehicles(@RequestBody authUserToken:String): MutableList<Vehicle> {
+        return if(validateUserViaToken(authUserToken,userRepository)){
+            VehicleRepository.vehicles
+        }else{
+            mutableListOf()
+        }
     }
-
 }
 private fun getRandomToken():String{
     var token = ""
@@ -62,10 +60,10 @@ private fun validateUserViaPassword(email:String,password: String, userRepositor
         false
 }
 
-private fun validateUserViaToken(email:String,token: String?, userRepository : UsersRepository):Boolean{
-    token?.let {
-        val user = userRepository.getById(email)
-        return user.token == decode(it,user.codeKey)
+private fun validateUserViaToken(token: String?, userRepository : UsersRepository):Boolean{
+    val possibleUser = token?.let { userRepository.findByToken(it) }
+    possibleUser?.let {
+        return true
     }
     return false
 }

@@ -2,7 +2,7 @@ package com.serverecomoving
 
 import com.google.gson.Gson
 
-class Marker(val latitude:Long) {
+class Vehicle(val latitude:Double, val longitude:Double) {
 
     override fun toString(): String {
         val gson = Gson()
