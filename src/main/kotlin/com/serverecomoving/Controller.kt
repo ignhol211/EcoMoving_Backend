@@ -6,6 +6,7 @@ import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
+
 @RestController
 class Controller (private val userRepository : UsersRepository) {
 
@@ -28,18 +29,17 @@ class Controller (private val userRepository : UsersRepository) {
             val user = userRepository.getById(request.email)
             user.token = token
             userRepository.save(user)
-            user.token = encode(token,user.codeKey)
             val authUser = AuthUser(user)
             authUser
         }else
             null
     }
-    @PostMapping("getAvailabledVehicles")
-    fun getAvailabledVehicles(@RequestBody authUserToken:String): MutableList<Vehicle> {
+    @PostMapping("getVehicles")
+    fun getVehicles(@RequestBody authUserToken:String): VehicleResponse? {
         return if(validateUserViaToken(authUserToken,userRepository)){
-            VehicleRepository.vehicles
+            VehicleResponse(VehicleRepository.vehicles)
         }else{
-            mutableListOf()
+            null
         }
     }
 }
@@ -60,12 +60,11 @@ private fun validateUserViaPassword(email:String,password: String, userRepositor
         false
 }
 
-private fun validateUserViaToken(token: String?, userRepository : UsersRepository):Boolean{
-    val possibleUser = token?.let { userRepository.findByToken(it) }
-    possibleUser?.let {
-        return true
-    }
-    return false
+private fun validateUserViaToken(token: String, userRepository : UsersRepository):Boolean{
+    println(token)
+    val possibleUser = userRepository.findByToken(token)
+    println(possibleUser.isPresent)
+    return possibleUser.isPresent
 }
 
 private fun encode(text: String, key: String): String {
