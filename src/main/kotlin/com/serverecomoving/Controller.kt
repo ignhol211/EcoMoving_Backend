@@ -61,9 +61,7 @@ private fun validateUserViaPassword(email:String,password: String, userRepositor
 }
 
 private fun validateUserViaToken(token: String, userRepository : UsersRepository):Boolean{
-    println(token)
     val possibleUser = userRepository.findByToken(token)
-    println(possibleUser.isPresent)
     return possibleUser.isPresent
 }
 
