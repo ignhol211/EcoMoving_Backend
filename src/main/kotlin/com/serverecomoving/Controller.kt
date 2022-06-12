@@ -10,11 +10,6 @@ import javax.crypto.spec.SecretKeySpec
 @RestController
 class Controller (private val userRepository : UsersRepository) {
 
-    @GetMapping("aaa")
-    fun index():List<User>{
-        return userRepository.findAll()
-    }
-
     @PostMapping("register")
     fun register(@RequestBody request:User){
         userRepository.save(request)
