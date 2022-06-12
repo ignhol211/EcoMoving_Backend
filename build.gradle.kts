@@ -26,6 +26,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	implementation("com.google.code.gson:gson:2.9.0")
+
+	compileOnly("javax.persistence:javax.persistence-api:2.2")
 }
 
 tasks.withType<KotlinCompile> {

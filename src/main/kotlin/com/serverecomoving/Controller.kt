@@ -16,10 +16,8 @@ class Controller (private val userRepository : UsersRepository) {
     }
 
     @PostMapping("register")
-    @ResponseBody
-    fun register(@RequestParam request:User): Boolean {
+    fun register(@RequestBody request:User){
         userRepository.save(request)
-        return true
     }
 
     @PostMapping("login")

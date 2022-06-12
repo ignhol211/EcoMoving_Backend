@@ -6,11 +6,10 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class Database {
-
     @Bean
     fun initDatabase(usersRepository: UsersRepository): CommandLineRunner {
         return CommandLineRunner{
-            usersRepository.save(User("ignac@gmail.com","Ignac123$"))
+            usersRepository.save(User("user@example.com","User1234$"))
         }
     }
 
